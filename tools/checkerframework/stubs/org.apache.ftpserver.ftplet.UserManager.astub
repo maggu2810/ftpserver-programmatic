@@ -1,0 +1,7 @@
+import org.checkerframework.checker.nullness.qual.*;
+
+package org.apache.ftpserver.ftplet;
+
+interface UserManager {
+    @Nullable User getUserByName(String username) throws FtpException;
+}

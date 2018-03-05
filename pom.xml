@@ -1,0 +1,474 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.maggu2810.playground.ftpserver.programmatic</groupId>
+  <artifactId>ftpserver-programmatic</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <my.java.version>1.8</my.java.version>
+    <maven.compiler.source>${my.java.version}</maven.compiler.source>
+    <maven.compiler.target>${my.java.version}</maven.compiler.target>
+
+    <bnd.version>3.5.0</bnd.version>
+
+    <checkerframework.version>2.3.1</checkerframework.version>
+    <checkerframework.qual.groupId>de.maggu2810.osgi-ify.org.checkerframework.checker-qual</checkerframework.qual.groupId>
+
+    <mina.ftpserver.version>1.1.1</mina.ftpserver.version>
+    <slf4j.version>1.7.21</slf4j.version>
+  </properties>
+
+  <licenses>
+    <license>
+      <name>Apache 2.0 License</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>maggu2810</name>
+    <url>https://www.github.com/maggu2810</url>
+  </organization>
+
+  <inceptionYear>2018</inceptionYear>
+
+  <scm>
+    <url>http://www.github.com/maggu2810/ftpserver-programmatic</url>
+    <connection>scm:git:git@github.com:maggu2810/ftpserver-programmatic.git</connection>
+    <developerConnection>scm:git:git@github.com:maggu2810/ftpserver-programmatic.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <url>https://www.github.com/maggu2810/ftpserver-programmatic/issues</url>
+    <system>Github</system>
+  </issueManagement>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Apache FtpServer -->
+      <dependency>
+        <groupId>org.apache.ftpserver</groupId>
+        <artifactId>ftpserver-core</artifactId>
+        <version>${mina.ftpserver.version}</version>
+      </dependency>
+
+      <!-- Checker Framework -->
+      <dependency>
+        <!-- annotations from the Checker Framework: nullness, interning, locking, ... -->
+        <groupId>${checkerframework.qual.groupId}</groupId>
+        <artifactId>checker-qual</artifactId>
+        <version>${checkerframework.version}</version>
+      </dependency>
+
+      <!-- OSGi -->
+      <dependency>
+        <!--Apache License, Version 2.0 -->
+        <groupId>org.osgi</groupId>
+        <artifactId>osgi.core</artifactId>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <!--Apache License, Version 2.0 -->
+        <groupId>org.osgi</groupId>
+        <artifactId>osgi.cmpn</artifactId>
+        <version>6.0.0</version>
+      </dependency>
+
+      <!-- Simple Logging Facade for Java (SLF4J) -->
+      <dependency>
+        <!--MIT License -->
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.cmpn</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${checkerframework.qual.groupId}</groupId>
+      <artifactId>checker-qual</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.apache.ftpserver</groupId>
+      <artifactId>ftpserver-core</artifactId>
+    </dependency>
+  </dependencies>
+
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>biz.aQute.bnd</groupId>
+          <artifactId>bnd-maven-plugin</artifactId>
+          <version>${bnd.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>bnd-process</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.14</version>
+          <configuration>
+            <licenseName>apache_v2</licenseName>
+            <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+            <emptyLineAfterHeader>true</emptyLineAfterHeader>
+            <ignoreNoFileToScan>true</ignoreNoFileToScan>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>update-file-header</goal>
+              </goals>
+              <phase>process-sources</phase>
+              <configuration>
+                <includes>
+                  <include>**/*.java</include>
+                </includes>
+                <canUpdateCopyright>true</canUpdateCopyright>
+                <canUpdateDescription>true</canUpdateDescription>
+                <canUpdateLicense>true</canUpdateLicense>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.17</version>
+          <configuration>
+            <skip>${quality.skip}</skip>
+            <configLocation>${basedirRoot}/quality/checkstyle/checkstyle.xml</configLocation>
+            <propertyExpansion>config_loc=${basedirRoot}/quality/checkstyle</propertyExpansion>
+            <violationSeverity>info</violationSeverity>
+          </configuration>
+          <dependencies>
+            <!-- For slf4j dependencies, have a look at: -->
+            <!-- https://github.com/jcgay/maven-color/issues/8 -->
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-jdk14</artifactId>
+              <version>[${slf4j.version}]</version>
+            </dependency>
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>jcl-over-slf4j</artifactId>
+              <version>[${slf4j.version}]</version>
+            </dependency>
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-simple</artifactId>
+              <version>[${slf4j.version}]</version>
+            </dependency>
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-api</artifactId>
+              <version>[${slf4j.version}]</version>
+            </dependency>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>7.8.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.5.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10.3</version>
+          <configuration>
+            <failOnError>!${quality.skip}</failOnError>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>3.8</version>
+          <configuration>
+            <skip>${quality.skip}</skip>
+            <linkXRef>false</linkXRef>
+            <rulesets>
+              <ruleset>${basedirRoot}/quality/pmd/pmd_ruleset.xml</ruleset>
+            </rulesets>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-core</artifactId>
+              <version>${pmd.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-java</artifactId>
+              <version>${pmd.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-javascript</artifactId>
+              <version>${pmd.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-jsp</artifactId>
+              <version>${pmd.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>3.1.0-RC8</version>
+          <configuration>
+            <skip>${quality.skip}</skip>
+            <plugins>
+              <plugin>
+                <!-- https://github.com/KengoTODA/findbugs-slf4j -->
+                <groupId>jp.skypencil.findbugs.slf4j</groupId>
+                <artifactId>bug-pattern</artifactId>
+                <version>1.4.0</version>
+              </plugin>
+            </plugins>
+            <findbugsXmlOutput>true</findbugsXmlOutput>
+            <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+            <xmlOutput>true</xmlOutput>
+            <effort>Max</effort>
+            <threshold>Low</threshold>
+            <maxRank>20</maxRank>
+            <excludeFilterFile>${basedirRoot}/quality/findbugs/findbugs_exclude.xml</excludeFilterFile>
+          </configuration>
+          <dependencies>
+            <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+            <dependency>
+              <groupId>com.github.spotbugs</groupId>
+              <artifactId>spotbugs</artifactId>
+              <version>3.1.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.commonjava.maven.plugins</groupId>
+        <artifactId>directory-maven-plugin</artifactId>
+        <version>0.1</version>
+        <executions>
+          <execution>
+            <id>directories</id>
+            <goals>
+              <goal>highest-basedir</goal>
+            </goals>
+            <phase>initialize</phase>
+            <configuration>
+              <property>basedirRoot</property>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>checkerframework-check</id>
+      <activation>
+        <property>
+          <name>check</name>
+        </property>
+      </activation>
+
+      <properties>
+        <fixloc.dir>${java.io.tmpdir}/maven.build/fixloc</fixloc.dir>
+        <fixloc.checkerframework.jdk8.jar>org.checkerframework.jdk8-${checkerframework.version}.jar</fixloc.checkerframework.jdk8.jar>
+        <fixloc.checkerframework.compiler.jar>org.checkerframework.compiler-${checkerframework.version}.jar</fixloc.checkerframework.compiler.jar>
+      </properties>
+
+      <dependencyManagement>
+        <dependencies>
+          <!-- Checker Framework -->
+          <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker</artifactId>
+            <version>${checkerframework.version}</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+
+      <dependencies>
+        <!-- Checker Framework -->
+        <dependency>
+          <groupId>org.checkerframework</groupId>
+          <artifactId>checker</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <!-- Without a dependency to the core framework the checker fails for every bundle not depend on it... -->
+        <!-- org.osgi.framework.Bundle -->
+        <dependency>
+          <groupId>org.osgi</groupId>
+          <artifactId>osgi.core</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <plugins>
+          <plugin>
+            <!-- This plugin will set the properties values using dependency information -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>properties</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>copy-checkerframework-stuff</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>copy</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <!-- The annotated JDK to use -->
+                      <groupId>org.checkerframework</groupId>
+                      <artifactId>jdk8</artifactId>
+                      <version>${checkerframework.version}</version>
+                      <type>jar</type>
+                      <destFileName>${fixloc.checkerframework.jdk8.jar}</destFileName>
+                    </artifactItem>
+                    <artifactItem>
+                      <!-- The type annotations compiler - uncomment if desired -->
+                      <groupId>org.checkerframework</groupId>
+                      <artifactId>compiler</artifactId>
+                      <version>${checkerframework.version}</version>
+                      <type>jar</type>
+                      <destFileName>${fixloc.checkerframework.compiler.jar}</destFileName>
+                    </artifactItem>
+                  </artifactItems>
+                  <outputDirectory>${fixloc.dir}</outputDirectory>
+                  <overWriteReleases>false</overWriteReleases>
+                  <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <fork>true</fork>
+              <annotationProcessors>
+                <!-- Add all the checkers you want to enable here -->
+                <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+              </annotationProcessors>
+              <compilerArgs>
+                <!-- directory containing annotated library stubs -->
+                <arg>-Astubs=${basedirRoot}/tools/checkerframework/stubs</arg>
+                <arg>-AstubWarnIfNotFound</arg>
+                <arg>-AstubWarnIfOverwritesBytecode</arg>
+                <arg>-AstubDebug</arg>
+
+                <!-- -Awarns Treat checker errors as warnings. -->
+                <!-- If you use this, you may wish to also supply -Xmaxwarns 10000, because by default javac prints at most 100 warnings. -->
+                <!-- <arg>-Awarns</arg> -->
+                <!-- <arg>-Xmaxwarns</arg> -->
+                <!-- <arg>10000</arg> -->
+                <arg>${checkerframework.compiler.arg1}</arg>
+
+                <!-- -AshowSuppressWarningKeys With each warning, show all possible keys to suppress that warning. -->
+                <arg>-AshowSuppressWarningKeys</arg>
+
+                <!-- location of the annotated JDK, which comes from a Maven dependency -->
+                <arg>-Xbootclasspath/p:${fixloc.dir}/${fixloc.checkerframework.jdk8.jar}</arg>
+                <!-- Uncomment the following line to use the type annotations compiler. -->
+                <!-- <arg>-J-Xbootclasspath/p:${fixloc.dir}/${fixloc.checkerframework.compiler.jar}</arg> -->
+              </compilerArgs>
+            </configuration>
+          </plugin>
+
+          <!-- <plugin> -->
+          <!-- <groupId>org.apache.maven.plugins</groupId> -->
+          <!-- <artifactId>maven-antrun-plugin</artifactId> -->
+          <!-- <executions> -->
+          <!-- <execution> -->
+          <!-- <phase>validate</phase> -->
+          <!-- <goals> -->
+          <!-- <goal>run</goal> -->
+          <!-- </goals> -->
+          <!-- <configuration> -->
+          <!-- <tasks> -->
+          <!-- <echo>[fixloc.dir] ${fixloc.dir}</echo> -->
+          <!-- <echo>[fixloc.checkerframework.jdk8.jar] ${fixloc.checkerframework.jdk8.jar}</echo> -->
+          <!-- </tasks> -->
+          <!-- </configuration> -->
+          <!-- </execution> -->
+          <!-- </executions> -->
+          <!-- </plugin> -->
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

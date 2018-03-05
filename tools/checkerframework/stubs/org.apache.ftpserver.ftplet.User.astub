@@ -1,0 +1,8 @@
+import org.checkerframework.checker.nullness.qual.*;
+
+package org.apache.ftpserver.ftplet;
+
+interface User {
+    @Nullable String getPassword();
+    @Nullable AuthorizationRequest authorize(AuthorizationRequest request);
+}
